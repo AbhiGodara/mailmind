@@ -2,7 +2,7 @@ import os
 import time
 import uuid
 import redis
-from langchain.tools import tool
+from crewai.tools import tool
 
 class ApprovalTools():
     @tool("Request Human Approval")

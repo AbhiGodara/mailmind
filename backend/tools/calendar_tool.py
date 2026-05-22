@@ -1,6 +1,6 @@
 import os
 import json
-from langchain.tools import tool
+from crewai.tools import tool
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 

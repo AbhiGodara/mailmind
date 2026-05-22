@@ -1,4 +1,4 @@
-from langchain.tools import tool
+from crewai.tools import tool
 from backend.db.database import SessionLocal
 from backend.db.models import EmailSummary
 import json
