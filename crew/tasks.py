@@ -42,8 +42,7 @@ class EmailFilterTasks:
 
                 - Assume the persona of the user and mimic the communication style.
                 - Do research IF NECESSARY BEFORE drafting.
-                - You MUST use the Request Human Approval tool before creating a draft. Pass a description like "Draft response to [Sender]: [Subject]".
-                - ONLY if approved, use the tool provided to create the draft.
+                - Use the Create Draft tool directly to save the draft.
                 """),
             expected_output="A confirmation that all responses have been handled.",
             agent=agent
@@ -81,9 +80,34 @@ class EmailFilterTasks:
             description=dedent("""\
                 Review the analyzed emails for any mention of dates, times, locations, and meeting titles.
                 If a meeting or event is detected with sufficient confidence:
-                Use the Create Calendar Event tool to add it to the calendar. Provide a JSON string with 
+                ONLY create events for confirmed meeting invitations with clear start and end times. DO NOT create events for job application follow-ups, general dates, or deadlines.
+                Use the Create Calendar Event tool directly to add it to the calendar. Provide a JSON string with 
                 summary, start_time, end_time, location, and description.
                 """),
             expected_output="A confirmation of any calendar events created.",
+            agent=agent
+        )
+
+    def export_data_task(self, agent):
+        return Task(
+            description=dedent("""\
+                Review all the processed and analyzed emails, drafts, and calendar events from this session.
+                For EACH email that was processed, you MUST use the Append to JSON file tool.
+                Provide a JSON string containing the following keys:
+                - email_id
+                - sender
+                - date (if available, else 'Unknown')
+                - type (category like PROMOTION, WORK, etc.)
+                - priority (HIGH or NORMAL)
+                - draft (the drafted response, or 'None' if skipped)
+                - summary (the brief summary of the email)
+                - whatsapp_msg (Set to 'Yes' IF AND ONLY IF priority is exactly 'HIGH'. If priority is 'NORMAL', this MUST be 'No')
+                - calendar_event (Details of the event added, or 'None' if no confirmed meeting)
+                - action_items (Key things to do based on the email)
+                - sentiment (Positive, Negative, Neutral)
+                - category (More specific category classification)
+                - is_promotional (True or False)
+                """),
+            expected_output="A confirmation that all processed emails have been exported to the JSON file.",
             agent=agent
         )

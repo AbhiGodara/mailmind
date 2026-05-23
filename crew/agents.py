@@ -10,6 +10,7 @@ from tools.twilio_tool import TwilioTools
 from tools.calendar_tool import CalendarTools
 from tools.db_tool import DatabaseTools
 from tools.approval_tool import ApprovalTools
+from tools.json_tool import JSONExportTools
 
 class EmailFilterAgents():
     def __init__(self):
@@ -35,7 +36,7 @@ class EmailFilterAgents():
                 You are adept at distinguishing important emails from spam, newsletters, and other
                 irrelevant content. Your expertise lies in identifying key patterns and markers that
                 signify the importance of an email."""),
-            verbose=False,
+            verbose=True,
             allow_delegation=False
         )
 
@@ -52,7 +53,7 @@ class EmailFilterAgents():
                 self.get_gmail_thread,
                 self.search_web
             ],
-            verbose=False,
+            verbose=True,
             allow_delegation=False,
         )
 
@@ -63,15 +64,13 @@ class EmailFilterAgents():
             backstory=dedent("""\
                 You are a skilled writer, adept at crafting clear, concise, and effective email responses.
                 Your strength lies in your ability to communicate effectively, ensuring that each response is
-                tailored to address the specific needs and context of the email. You ALWAYS request human
-                approval before saving or sending a draft using the Request Human Approval tool."""),
+                tailored to address the specific needs and context of the email."""),
             tools=[
                 self.search_web,
                 self.get_gmail_thread,
-                ApprovalTools.request_approval,
                 CreateDraftTool.create_draft
             ],
-            verbose=False,
+            verbose=True,
             allow_delegation=False,
         )
 
@@ -83,7 +82,7 @@ class EmailFilterAgents():
                 You are responsible for making sure the user is immediately notified about highly
                 urgent emails via WhatsApp. You extract the key details and send a succinct summary."""),
             tools=[TwilioTools.send_whatsapp],
-            verbose=False,
+            verbose=True,
             allow_delegation=False,
         )
 
@@ -97,7 +96,7 @@ class EmailFilterAgents():
             tools=[
                 CalendarTools.create_event
             ],
-            verbose=False,
+            verbose=True,
             allow_delegation=False,
         )
 
@@ -111,6 +110,21 @@ class EmailFilterAgents():
             tools=[
                 DatabaseTools.save_summary
             ],
-            verbose=False,
+            verbose=True,
+            allow_delegation=False,
+        )
+
+    def export_data_agent(self):
+        return Agent(
+            role='Data Export Specialist',
+            goal='Compile and export all processed email information into a structured JSON file.',
+            backstory=dedent("""\
+                You are a meticulous data engineer responsible for aggregating all the processed
+                information from the email workflow (summaries, drafts, priorities, and actions)
+                and saving it securely to a JSON file for analytics and record-keeping."""),
+            tools=[
+                JSONExportTools.append_to_json
+            ],
+            verbose=True,
             allow_delegation=False,
         )

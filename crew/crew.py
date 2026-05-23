@@ -12,6 +12,7 @@ class EmailFilterCrew():
         self.notifier_agent = agents.notifier_agent()
         self.calendar_agent = agents.calendar_agent()
         self.summarization_agent = agents.summarization_agent()
+        self.export_agent = agents.export_data_agent()
 
     def kickoff(self, state):
         print("### Filtering emails")
@@ -26,7 +27,8 @@ class EmailFilterCrew():
                 self.action_agent, 
                 self.notifier_agent,
                 self.calendar_agent,
-                self.writer_agent
+                self.writer_agent,
+                self.export_agent
             ],
             tasks=[
                 tasks.filter_emails_task(self.filter_agent, formatted_emails),
@@ -34,9 +36,10 @@ class EmailFilterCrew():
                 tasks.action_required_emails_task(self.action_agent),
                 tasks.notify_high_priority_task(self.notifier_agent),
                 tasks.extract_calendar_events_task(self.calendar_agent),
-                tasks.draft_responses_task(self.writer_agent)
+                tasks.draft_responses_task(self.writer_agent),
+                tasks.export_data_task(self.export_agent)
             ],
-            verbose=False
+            verbose=True
         )
         result = crew.kickoff()
         return {**state, "action_required_emails": result}
