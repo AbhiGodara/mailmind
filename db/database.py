@@ -2,7 +2,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Default to a local SQLite database if no Postgres URL is provided
+# Default to a local SQLite database if no Postgres URL is provided to the docker-compose
 DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/mailmind")
 
 engine = create_engine(

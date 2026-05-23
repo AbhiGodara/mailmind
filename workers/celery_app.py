@@ -11,13 +11,15 @@ app.conf.update(
     result_serializer='json',
     timezone='UTC',
     enable_utc=True,
-    imports=['workers.tasks']
+    imports=['workers.tasks'],
+    worker_log_format="%(message)s",
+    worker_task_log_format="%(message)s",
 )
 
-# Setup periodic task to poll Gmail every 10 seconds
+# Setup periodic task to poll Gmail every 60 seconds
 app.conf.beat_schedule = {
-    'poll-gmail-every-10-seconds': {
+    'poll-gmail-every-60-seconds': {
         'task': 'workers.tasks.poll_gmail',
-        'schedule': 10.0, # Every 10 seconds
+        'schedule': 60.0, # Every 60 seconds
     },
 }

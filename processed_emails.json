@@ -1,0 +1,42 @@
+[
+    {
+        "email_id": "19e544956e260464",
+        "sender": "Abhishek Godara <abhishekgodara032@gmail.com>",
+        "date": "May 23, 2026",
+        "type": "Job Application",
+        "priority": "NORMAL",
+        "draft": "Subject: Follow Up on Application Status\n\nDear Hiring Team,\n\nI hope this message finds you well. I am writing to follow up on my application for the position of Application Developer - AI Trainer at DataAnnotation in Bengaluru, submitted on May 23, 2026. \n\nI am excited about the opportunity to contribute to your team and would love to hear more about the status of my application when convenient. \n\nThank you for your time.\n\nBest regards,  \nAbhishek Godara",
+        "summary": "The email is a forwarded message from Indeed regarding an application for the position of Application Developer - AI Trainer at DataAnnotation located in Bengaluru.",
+        "whatsapp_msg": "Yes"
+    },
+    {
+        "email_id": "19e4f4777edc5a78",
+        "sender": "filmiera <filmiera0007@gmail.com>",
+        "date": "Unknown",
+        "type": "WORK",
+        "priority": "HIGH",
+        "draft": "Hi, \n\nI confirm my attendance for the emergency meeting tomorrow at 3 PM to discuss the new project requirements. Looking forward to it. \n\nRegards,\nFilmiera.",
+        "summary": "Urgent request for an emergency meeting tomorrow at 3 PM to discuss new project requirements. Please confirm attendance.",
+        "whatsapp_msg": "Yes",
+        "calendar_event": "Emergency Meeting: New Project Requirements on May 23, 2026, at 3:00 PM (PDT)",
+        "action_items": "Review the project details, respond to the sender regarding the deadline, ensure all necessary actions are taken before the deadline.",
+        "sentiment": "Neutral",
+        "category": "Urgent",
+        "is_promotional": false
+    },
+    {
+        "email_id": "19e54af78badfe2d",
+        "sender": "Abhishek Godara <abhishekgodara032@gmail.com>",
+        "date": "Unknown",
+        "type": "Internship",
+        "priority": "HIGH",
+        "draft": "Hi Abhishek,\n\nThanks for the reminder about the internship assignment. I will ensure that I complete it before the deadline on 24/05/2026.\n\nIf there are any specific guidelines or requirements that I should keep in mind while working on it, please let me know.\n\nBest regards,\n[Your Name]",
+        "summary": "Urgent message regarding the internship assignment. Complete the assignment before 24/05/2026.",
+        "whatsapp_msg": "Yes",
+        "calendar_event": "None",
+        "action_items": "Complete the internship assignment by the specified deadline.",
+        "sentiment": "Neutral",
+        "category": "Internship",
+        "is_promotional": false
+    }
+]
