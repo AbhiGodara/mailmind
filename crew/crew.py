@@ -15,7 +15,7 @@ class EmailFilterCrew():
         self.export_agent = agents.export_data_agent()
 
     def kickoff(self, state):
-        print("### Filtering emails")
+        print("\n🚀 Kicking off Crew AI to process new emails...")
         tasks = EmailFilterTasks()
         
         formatted_emails = self._format_emails(state['emails'])
@@ -39,7 +39,7 @@ class EmailFilterCrew():
                 tasks.draft_responses_task(self.writer_agent),
                 tasks.export_data_task(self.export_agent)
             ],
-            verbose=True
+            verbose=False
         )
         result = crew.kickoff()
         return {**state, "action_required_emails": result}
@@ -47,7 +47,6 @@ class EmailFilterCrew():
     def _format_emails(self, emails):
         emails_string = []
         for email in emails:
-            print(email)
             arr = [
                 f"ID: {email['id']}",
                 f"- Thread ID: {email['threadId']}",
