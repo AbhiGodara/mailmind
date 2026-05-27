@@ -18,20 +18,25 @@ class Nodes():
         )
         api_resource = build_resource_service(credentials=credentials)
         self.gmail = GmailToolkit(api_resource=api_resource)
-
-    def check_email(self, state):
-        print("# Checking for new emails")
-        search = GmailSearch(api_resource=self.gmail.api_resource)
-        emails = search._run(query='newer_than:1d')
+        
+        # Initialize Redis connection once
         redis_url = os.environ.get("REDIS_URL", "redis://redis:6379/0")
         try:
             import redis
-            r = redis.Redis.from_url(redis_url, decode_responses=True)
-            r.ping() # test connection
-            redis_available = True
+            self.redis_client = redis.Redis.from_url(redis_url, decode_responses=True)
+            self.redis_client.ping() # test connection
+            self.redis_available = True
         except Exception as e:
             print(f"Redis not available for caching emails: {e}")
-            redis_available = False
+            self.redis_available = False
+
+    def check_email(self, state):
+        search = GmailSearch(api_resource=self.gmail.api_resource)
+        try:
+            emails = search._run(query='newer_than:10m')
+        except Exception as e:
+            print(f"Error fetching emails from Gmail API: {e}")
+            emails = []
 
         checked_emails = state.get('checked_emails_ids', [])
         thread = []
@@ -39,7 +44,7 @@ class Nodes():
         for email in emails:
             # Check Redis to see if we processed this exact email in a previous run
             is_processed = False
-            if redis_available and r.get(f"processed_email:{email['id']}"):
+            if self.redis_available and self.redis_client.get(f"processed_email:{email['id']}"):
                 is_processed = True
 
             sender = email.get('sender', '')
@@ -52,9 +57,9 @@ class Nodes():
             elif email['threadId'] in thread:
                 pass # Already got an email from this thread
             elif my_email and my_email in sender:
-                print(f"  -> Skipping email from yourself: {sender}")
+                pass # Skipping email from yourself
             else:
-                print(f"  -> Found NEW email from: {sender}")
+                print(f"\n✨ New email detected from: {sender}")
                 thread.append(email['threadId'])
                 new_emails.append(
                     {
@@ -64,9 +69,9 @@ class Nodes():
                         "sender": sender
                     }
                 )
-                if redis_available:
+                if self.redis_available:
                     # Remember this email was processed for 48 hours
-                    r.set(f"processed_email:{email['id']}", "1", ex=172800)
+                    self.redis_client.set(f"processed_email:{email['id']}", "1", ex=172800)
 
         checked_emails.extend([email['id'] for email in emails])
         return {
@@ -77,8 +82,6 @@ class Nodes():
 
     def new_emails(self, state):
         if len(state['emails']) == 0:
-            print("## No new emails")
             return "end"
         else:
-            print("## New emails")
             return "continue"
